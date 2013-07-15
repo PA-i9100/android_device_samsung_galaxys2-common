@@ -69,7 +69,7 @@ PRODUCT_PACKAGES += \
 
 # HAL
 PRODUCT_PACKAGES += \
-	camera.smdk4210 \
+    camera.smdk4210 \
     gralloc.exynos4 \
     hwcomposer.exynos4 \
     libnetcmdiface \
