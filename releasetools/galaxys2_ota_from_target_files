@@ -73,13 +73,19 @@ def WriteFullOTAPackage(input_zip, output_zip):
   if OPTIONS.wipe_user_data:
     script.FormatPartition("/data")
 
+  script.Print("")
+  script.Print("Format and Mount System, Mount Data...")
   script.Unmount("/system")
   script.FormatPartition("/system")
   script.Mount("/system")
+  script.Mount("/data")
   script.UnpackPackageDir("recovery", "/system")
   script.UnpackPackageDir("system", "/system")
+  script.UnpackPackageDir("data", "/data")
 
+  script.Print("Symlinks and permissions...")
   symlinks = CopySystemFiles(input_zip, output_zip)
+  CopyDataFiles(input_zip, output_zip)
   script.MakeSymlinks(symlinks)
 
   CopyBootFiles(input_zip, output_zip)
@@ -94,6 +100,7 @@ def WriteFullOTAPackage(input_zip, output_zip):
     script.RunBackup("restore")
 
   script.ShowProgress(0.2, 10)
+  script.Print("Flashing boot image...")
   script.EMMCWriteRawImage("/dev/block/mmcblk0p5", "boot.img")
 
   script.ShowProgress(0.1, 0)
